@@ -1,20 +1,14 @@
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
-from operator import attrgetter
 import psutil
 import socket
-
 
 console = Console()
 
 # System Information
 hostname = socket.gethostname()
-ip_address = socket.gethostbyname(hostname)
 current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-boot_time = datetime.fromtimestamp(psutil.boot_time())
-uptime = datetime.now() - boot_time
 
 cpu_usage = psutil.cpu_percent(interval=1)
 ram_usage = psutil.virtual_memory().percent
@@ -22,23 +16,8 @@ disk_usage = psutil.disk_usage('/').percent
 
 network = psutil.net_io_counters()
 connections = psutil.net_connections()
-processes = []
-
-for proc in psutil.process_iter(['pid','name','cpu_percent']):
-    try:
-        processes.append(proc.info)
-    except:
-        pass
-
-top_processes = sorted(
-    processes,
-    key=lambda x: x['cpu_percent'],
-    reverse=True
-)[:5]
 
 interfaces = psutil.net_if_addrs()
-
-interface_names = ", ".join(interfaces.keys())
 
 # Alerts
 cpu_alert = "NORMAL"
@@ -62,9 +41,6 @@ table.add_column("Value", style="green")
 
 table.add_row("Timestamp", current_time)
 table.add_row("Hostname", hostname)
-table.add_row("IP Address", ip_address)
-
-table.add_row("System Uptime", str(uptime).split('.')[0])
 
 table.add_row("CPU Usage", f"{cpu_usage}%")
 table.add_row("CPU Alert", cpu_alert)
@@ -81,32 +57,11 @@ table.add_row("Bytes Received", str(network.bytes_recv))
 table.add_row("Active Connections", str(len(connections)))
 table.add_row("Network Interfaces", str(len(interfaces)))
 
-table.add_row("Interface Names", interface_names)
-process_table = Table(title="Top CPU Processes")
-
-process_table.add_column("PID")
-process_table.add_column("Name")
-process_table.add_column("CPU %")
-
-for p in top_processes:
-    process_table.add_row(
-        str(p['pid']),
-        str(p['name']),
-        str(p['cpu_percent'])
-    )
-
-console.print(process_table)
 console.print(table)
 
 # Logging
 with open("system.log", "a") as log:
     log.write(
-    f"{current_time}, "
-    f"HOST={hostname}, "
-    f"CPU={cpu_usage}%, "
-    f"RAM={ram_usage}%, "
-    f"DISK={disk_usage}%, "
-    f"SENT={network.bytes_sent}, "
-    f"RECV={network.bytes_recv}, "
-    f"CONNECTIONS={len(connections)}\n"
-)
+        f"{current_time}, CPU={cpu_usage}%, RAM={ram_usage}%, "
+        f"DISK={disk_usage}%, CONNECTIONS={len(connections)}\n"
+    )
