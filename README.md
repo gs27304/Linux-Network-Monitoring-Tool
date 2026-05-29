@@ -2,17 +2,22 @@
 
 A Linux-based system monitoring tool developed using Python, psutil, Bash scripting, and cron automation.
 
+
 ## Features
 
-- CPU usage monitoring
-- RAM usage monitoring
-- Disk usage monitoring
-- Network traffic monitoring
-- Active connection monitoring
-- Terminal dashboard using Rich
-- Automated execution using Bash scripts
-- Scheduled monitoring using cron jobs
-- Log generation for system statistics
+- CPU Monitoring
+- RAM Monitoring
+- Disk Monitoring
+- Network Monitoring
+- Active Connection Tracking
+- Host Uptime Monitoring
+- Interface Discovery
+- IP Address Detection
+- Top CPU Process Monitoring
+- Threshold-Based Alerts
+- Automated Logging
+- Cron Automation
+
 
 ## Technologies Used
 
@@ -64,4 +69,20 @@ Displays:
 - Network interface statistics
 - Export reports to CSV
 
+## Screenshots
 
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### Top CPU Processes
+
+![Processes](screenshots/top_processes.png)
+
+### System Logs
+
+![Logs](screenshots/system_log.png)
+
+### GitHub Repository
+
+![Repository](screenshots/github_repo.png)
